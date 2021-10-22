@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+//Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
+ //   return Inertia::render('Dashboard');
+ //   })->name('dashboard');
+
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
+    return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+//Route::get('/novoproduto', 'App\Http\Controllers\ProdutosController@create')->name('novoproduto');
+
+Route::get('/novoproduto',[ProdutosController::class, 'create'])->middleware('auth');;
+Route::post('/produtoscontroller',[ProdutosController::class, 'store'])->middleware('auth');;
+Route::get('/listaprodutos', [ProdutosController::class, 'index']);
+
+Route::resource('products',ProductController::class);
+
